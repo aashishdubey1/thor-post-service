@@ -6,6 +6,7 @@ import { postSchema } from '../schemas/Post';
 import { generalLimiter, strictLimiter } from '../middlewares/rateLimitter';
 
 const router = express.Router();
+
 const postController = new PostController()
 
 router.use(authenticateReq);

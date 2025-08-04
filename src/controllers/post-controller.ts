@@ -13,18 +13,19 @@ export class PostController {
 
     async createPost(req:Request,res:Response,next:NextFunction){
         try {
+            logger.info("Req hitted Create post controller")
             const user = req.user?.userId!;
-            const {content,mediaUrls} = req.body as PostType
-
+            const {content,mediaUrls} = req.body
+            console.log(req.body,'body inside controller')
+            console.log("content inside controller",content)
             const createdPost = await postService.createPost({user,content,mediaUrls})
-            res.status(StatusCodes.CREATED).json({
+            return res.status(StatusCodes.CREATED).json({
                 success:true,
                 message:"Post created",
                 data:createdPost,
                 error:{}
             })
         } catch (error) {
-            logger.error("Error creating post",error)
             next(error)
         }
     }

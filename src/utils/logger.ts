@@ -14,7 +14,7 @@ const logger = createLogger({
         format.splat(),
         format.json()
     ),
-    defaultMeta:{service:"identity-service"},
+    defaultMeta:{service:"Post-service"},
     transports:[
         new transports.Console({
             format:isDev ? format.combine(format.colorize(),format.simple()):format.json()

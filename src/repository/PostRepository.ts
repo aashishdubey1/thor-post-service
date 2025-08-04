@@ -1,10 +1,13 @@
 import { IPost, Post } from "../models/Post";
-import { PostType } from "../schemas/Post";
+import logger from "../utils/logger";
+import { PostSchema } from "../utils/types/PostType";
 import IPostRepository from "./postRepo-interface";
 
 export class PostRepository implements IPostRepository {
 
-    async create(data:PostType):Promise<IPost>{
+    async create(data:PostSchema):Promise<IPost>{
+        logger.info("Req hitted Create post repository")
+        console.log(data, "inside repo")
         return await Post.create(data)
     }
 
@@ -16,7 +19,7 @@ export class PostRepository implements IPostRepository {
         return await Post.find()
     }
 
-    async update(id:string,data:Partial<PostType>):Promise<IPost | null>{
+    async update(id:string,data:Partial<PostSchema>):Promise<IPost | null>{
         return await Post.findByIdAndUpdate(id,data,{new:true})
     }
 

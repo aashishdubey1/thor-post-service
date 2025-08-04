@@ -1,9 +1,8 @@
 import { DBError } from "../errors/DbError";
 import { NotFoundError } from "../errors/NotFoundError";
-import { IPost } from "../models/Post";
 import IPostRepository from "../repository/postRepo-interface";
-import { PostType } from "../schemas/Post";
 import logger from "../utils/logger";
+import { PostSchema } from "../utils/types/PostType";
 
 export class PostService {
 
@@ -13,13 +12,14 @@ export class PostService {
         this.repository = repository
     }
 
-    async createPost(data:PostType){
+    async createPost(data:PostSchema){
         try {
-            const newPost = this.repository.create(data)
-            logger.info("Post creatd")
+            logger.info("Req hitted Create post service")
+            console.log(data, "inside service")
+            const newPost = await this.repository.create(data)
+            logger.info("Post created")
             return newPost
         } catch (error) {
-            logger.error(`Error creating Post ${error}`)
             throw DBError.create(error);
         }
     }
@@ -45,7 +45,7 @@ export class PostService {
         }
     }
 
-    async updatePost(id:string,body:Partial<PostType>){
+    async updatePost(id:string,body:Partial<PostSchema>){
         try {
             const updatedPost = await this.repository.update(id,body)
             if(!updatedPost){

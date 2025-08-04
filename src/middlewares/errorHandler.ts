@@ -9,14 +9,14 @@ export const errorHandler = function(err:Error,req:Request,res:Response,next:Nex
 
     if(err instanceof AppError){
         logger.error(`${err.type} ${err.message}`)
-        res.status(err.statusCode).json({
+        return res.status(err.statusCode).json({
             success:false,
             type:err.type,
             message:err.message,           
         })
     }
 
-    logger.error("UNHANDLED ERROR:", err)
+    logger.error(`UNHANDLED ERROR: ${err.stack || err.message || err}`);
 
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     status: "error",

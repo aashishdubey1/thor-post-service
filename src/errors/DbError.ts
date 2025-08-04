@@ -11,8 +11,6 @@ export class DBError extends AppError {
     }
 
     public static create(originalError: unknown): DBError {
-        // Log the original error for debugging purposes
-        logger.error('Original DB Error:', originalError);
 
         // Check for Mongoose Validation Errors
         if (originalError instanceof MongooseError.ValidationError) {

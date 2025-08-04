@@ -1,8 +1,7 @@
 import {z} from 'zod'
 
 export const postSchema = z.object({
-    user:z.string(),
-    mediaUrls:z.array(z.string()),
+    mediaUrls:z.array(z.string()).optional(),
     content:z.string()
 })
 

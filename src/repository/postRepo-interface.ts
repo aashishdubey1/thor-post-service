@@ -1,11 +1,12 @@
 import { IPost } from "../models/Post";
 import { PostType } from "../schemas/Post";
+import { PostSchema } from "../utils/types/PostType";
 
 export default interface IPostRepository {
 
-    create:(data:PostType)=> Promise<IPost>,
+    create:(data:PostSchema)=> Promise<IPost>,
     get:(id:string)=> Promise<IPost | null>,
     getAll:()=> Promise<IPost[]>,
-    update:(id:string,data:Partial<PostType>)=>Promise<IPost | null>,
+    update:(id:string,data:Partial<PostSchema>)=>Promise<IPost | null>,
     delete:(id:string)=> Promise<IPost | null>
 }
