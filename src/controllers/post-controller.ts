@@ -1,0 +1,97 @@
+import { NextFunction, Request,Response } from "express";
+import { PostRepository } from "../repository/PostRepository";
+import { PostService } from "../service/PostService";
+import { StatusCodes } from "http-status-codes";
+import logger from "../utils/logger";
+import { PostType } from "../schemas/Post";
+
+
+const postService = new PostService(new PostRepository())
+
+
+export class PostController {
+
+    async createPost(req:Request,res:Response,next:NextFunction){
+        try {
+            const user = req.user?.userId!;
+            const {content,mediaUrls} = req.body as PostType
+
+            const createdPost = await postService.createPost({user,content,mediaUrls})
+            res.status(StatusCodes.CREATED).json({
+                success:true,
+                message:"Post created",
+                data:createdPost,
+                error:{}
+            })
+        } catch (error) {
+            logger.error("Error creating post",error)
+            next(error)
+        }
+    }
+
+    async getPost(req:Request,res:Response,next:NextFunction){
+        try {
+            const id = req.params.id;
+            const posts = await postService.getPost(id!)
+            res.status(StatusCodes.OK).json({
+                success:true,
+                message:"Post found Successfully ",
+                data:posts,
+                error:{}
+            })
+        } catch (error) {
+            logger.error("Error getting post",error)
+            next(error)
+        }
+    }
+
+    async getAllPost(req:Request,res:Response,next:NextFunction){
+        try {
+            const allPosts = await postService.getAllPost()
+            res.status(StatusCodes.OK).json({
+                success:true,
+                message:"Getting all Posts",
+                data:allPosts,
+                error:{}
+            })
+        } catch (error) {
+            logger.error("Error getting all post",error)
+            next(error)
+        }
+    }
+
+    async updatePost(req:Request,res:Response,next:NextFunction){
+        try {
+            const id = req.params.id;
+            const data = req.body
+            const updatePost = await postService.updatePost(id!,data)
+            res.status(StatusCodes.OK).json({
+                success:true,
+                message:"Post updated",
+                data:updatePost,
+                error:{}
+            })
+        } catch (error) {
+            logger.error("Error updating  post",error)
+            next(error)
+        }
+    }
+
+    async deletePost(req:Request,res:Response,next:NextFunction){
+        try {
+            const id = req.params.id;
+            const data = req.body
+            const updatePost = await postService.updatePost(id!,data)
+            res.status(StatusCodes.OK).json({
+                success:true,
+                message:"Post updated",
+                data:updatePost,
+                error:{}
+            })
+        } catch (error) {
+            logger.error("Error deleting post",error)
+            next(error)
+        }
+    }
+    
+}
