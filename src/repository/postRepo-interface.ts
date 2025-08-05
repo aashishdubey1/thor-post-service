@@ -6,7 +6,8 @@ export default interface IPostRepository {
 
     create:(data:PostSchema)=> Promise<IPost>,
     get:(id:string)=> Promise<IPost | null>,
-    getAll:()=> Promise<IPost[]>,
+    getAll:(skip:number,limit:number)=> Promise<IPost[]>,
     update:(id:string,data:Partial<PostSchema>)=>Promise<IPost | null>,
-    delete:(id:string)=> Promise<IPost | null>
+    delete:(id:string)=> Promise<IPost | null>,
+    countAll:()=>Promise<any>
 }

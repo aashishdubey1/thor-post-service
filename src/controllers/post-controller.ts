@@ -3,7 +3,7 @@ import { PostRepository } from "../repository/PostRepository";
 import { PostService } from "../service/PostService";
 import { StatusCodes } from "http-status-codes";
 import logger from "../utils/logger";
-import { PostType } from "../schemas/Post";
+import redis from "../config/redis-config";
 
 
 const postService = new PostService(new PostRepository())
@@ -48,7 +48,13 @@ export class PostController {
 
     async getAllPost(req:Request,res:Response,next:NextFunction){
         try {
-            const allPosts = await postService.getAllPost()
+
+            const page = Number(req.query.page) || 1;
+            const limit = Number(req.query.limit) || 10;
+            const startIndex = ( page - 1 ) * limit
+
+            const allPosts = await postService.getAllPost(startIndex,limit,page)
+
             res.status(StatusCodes.OK).json({
                 success:true,
                 message:"Getting all Posts",

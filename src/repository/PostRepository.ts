@@ -6,8 +6,6 @@ import IPostRepository from "./postRepo-interface";
 export class PostRepository implements IPostRepository {
 
     async create(data:PostSchema):Promise<IPost>{
-        logger.info("Req hitted Create post repository")
-        console.log(data, "inside repo")
         return await Post.create(data)
     }
 
@@ -15,8 +13,8 @@ export class PostRepository implements IPostRepository {
         return await Post.findById(id)
     }
 
-    async getAll():Promise<IPost[]>{
-        return await Post.find()
+    async getAll(skip:number,limit:number):Promise<IPost[]>{
+        return await Post.find().sort({createdAt:-1}).skip(skip).limit(limit)
     }
 
     async update(id:string,data:Partial<PostSchema>):Promise<IPost | null>{
@@ -26,4 +24,9 @@ export class PostRepository implements IPostRepository {
     async delete(id:string):Promise<IPost | null>{
         return await Post.findByIdAndDelete(id)
     }
+
+    async countAll(){
+        return await Post.countDocuments();
+    }
+
 }
