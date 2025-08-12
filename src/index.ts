@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import apiRouter from './routes/post-routes'
 import { connectToDB } from './config/db-config';
 import logger from './utils/logger';
+import { connectRabbitMQ } from './config/rabbitMq-config';
 
 
 const app = express()
@@ -20,7 +21,8 @@ app.use(errorHandler)
 
 app.listen(serverConfig.PORT,async()=>{
     console.log(`Server is running on Port ${serverConfig.PORT}`)
-    await connectToDB()
+    await connectToDB();
+    await connectRabbitMQ()
 })
 
 process.on("uncaughtException", (err) => {

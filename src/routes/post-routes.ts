@@ -9,7 +9,7 @@ const router = express.Router();
 
 const postController = new PostController()
 
-// router.use(authenticateReq);
+router.use(authenticateReq);
 
 router.post('/post',strictLimiter,validateReq(postSchema),postController.createPost)
 

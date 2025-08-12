@@ -9,7 +9,7 @@ export function authenticateReq(req:Request,res:Response,next:NextFunction){
     try {
         const userId = req.headers['x-user-id'] as string;
         console.log(userId, "from other service")
-        if(!userId){
+        if(!userId){    
             logger.warn("Acess attemeped without user id")
             throw new AuthenticationError("User is not Authenticated")
         }

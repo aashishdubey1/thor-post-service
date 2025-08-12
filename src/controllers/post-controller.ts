@@ -87,12 +87,11 @@ export class PostController {
     async deletePost(req:Request,res:Response,next:NextFunction){
         try {
             const id = req.params.id;
-            const data = req.body
-            const updatePost = await postService.updatePost(id!,data)
+            const deletedPost = await postService.deletePost(id!)
             res.status(StatusCodes.OK).json({
                 success:true,
-                message:"Post updated",
-                data:updatePost,
+                message:"Post Deleted",
+                data:deletedPost,
                 error:{}
             })
         } catch (error) {

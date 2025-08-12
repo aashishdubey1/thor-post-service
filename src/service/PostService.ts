@@ -1,9 +1,11 @@
+import { EXCHANGE_NAME } from "../config/rabbitMq-config";
 import redis from "../config/redis-config";
 import { DBError } from "../errors/DbError";
 import { NotFoundError } from "../errors/NotFoundError";
 import IPostRepository from "../repository/postRepo-interface";
 import logger from "../utils/logger";
 import { PostSchema } from "../utils/types/PostType";
+import { EventPublisher } from "./eventPublisher";
 
 export class PostService {
 
@@ -115,6 +117,7 @@ export class PostService {
                 throw new NotFoundError("Post not found")
             }
             await this.invalidateCache();
+            await EventPublisher.publicEvent({mediaId:deletedPost.mediaUrls,postId:deletedPost._id},"post.deleted",EXCHANGE_NAME)
             return deletedPost
         } catch (error) {
             throw DBError.create(error)
