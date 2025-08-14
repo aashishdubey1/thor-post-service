@@ -22,6 +22,7 @@ export class PostService {
             const newPost = await this.repository.create(data)
             logger.info("Post created")
             await this.invalidateCache()
+            await EventPublisher.publishEvent({userId:newPost.user.toString(),postId:newPost._id!.toString(),content:newPost.content},"post.created",EXCHANGE_NAME)
             return newPost
         } catch (error) {
             throw DBError.create(error);
@@ -117,7 +118,7 @@ export class PostService {
                 throw new NotFoundError("Post not found")
             }
             await this.invalidateCache();
-            await EventPublisher.publicEvent({mediaId:deletedPost.mediaUrls,postId:deletedPost._id},"post.deleted",EXCHANGE_NAME)
+            await EventPublisher.publishEvent({mediaId:deletedPost.mediaUrls,postId:deletedPost._id},"post.deleted",EXCHANGE_NAME)
             return deletedPost
         } catch (error) {
             throw DBError.create(error)
